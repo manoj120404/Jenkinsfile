@@ -5,23 +5,27 @@ ResponseC response_time=300
 📄 Libraries/response_validator.py
 import re
 
-class ResponseValidator:
-    def validate_response_time_log(self, log_file_path):
-        result = {}
+def validate_response_time_log(log_file_path):
+    """
+    Reads response log, validates response times,
+    and returns PASS/FAIL for each response
+    """
+    result = {}
 
-        with open(log_file_path, "r") as file:
-            for line in file:
-                match = re.search(r'(\w+)\s+response_time=(\d+)', line)
-                if match:
-                    name = match.group(1)
-                    time = int(match.group(2))
+    with open(log_file_path, "r") as file:
+        for line in file:
+            match = re.search(r'(\w+)\s+response_time=(\d+)', line)
+            if match:
+                response_name = match.group(1)
+                response_time = int(match.group(2))
 
-                    if time <= 500:
-                        result[name] = "PASS"
-                    else:
-                        result[name] = "FAIL"
+                if response_time <= 500:
+                    result[response_name] = "PASS"
+                else:
+                    result[response_name] = "FAIL"
 
-        return result
+    return result
+
 
 
 
