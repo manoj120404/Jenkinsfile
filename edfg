@@ -6,37 +6,29 @@ ResponseC response_time=300
 import re
 
 class ResponseValidator:
-    """
-    Custom Robot Framework library to validate response times from a log file
-    """
-
     def validate_response_time_log(self, log_file_path):
-        """
-        Reads a log file, parses response times, validates them,
-        and returns a dictionary with PASS/FAIL status.
-        """
         result = {}
 
         with open(log_file_path, "r") as file:
             for line in file:
-                # Example line: ResponseA response_time=120
                 match = re.search(r'(\w+)\s+response_time=(\d+)', line)
                 if match:
-                    response_name = match.group(1)
-                    response_time = int(match.group(2))
+                    name = match.group(1)
+                    time = int(match.group(2))
 
-                    if response_time <= 500:
-                        result[response_name] = "PASS"
+                    if time <= 500:
+                        result[name] = "PASS"
                     else:
-                        result[response_name] = "FAIL"
+                        result[name] = "FAIL"
 
         return result
+
 
 
 📄 TestSuite/validate_response.robot
 
 *** Settings ***
-Library    ../Libraries/response_validator.py
+Library    ../Libraries/responsevalidator.py
 
 *** Test Cases ***
 Validate Response Time Log
