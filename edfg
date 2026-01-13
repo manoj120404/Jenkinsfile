@@ -1,0 +1,27 @@
+*** Settings ***
+Library    BuiltIn
+
+*** Keywords ***
+Add Two Numbers Globally
+    [Arguments]    ${a}    ${b}
+    ${result}=    Evaluate    ${a} + ${b}
+    [Return]    ${result}
+
+
+*** Settings ***
+Resource    ../Resources/math_keywords.robot
+
+*** Test Cases ***
+Add Two Numbers Using Global Keyword
+    ${sum}=    Add Two Numbers Globally    10    20
+    Log To Console    Global Sum = ${sum}
+
+Add Two Numbers Using Local Keyword
+    ${sum}=    Add Two Numbers Locally    5    7
+    Log To Console    Local Sum = ${sum}
+
+*** Keywords ***
+Add Two Numbers Locally
+    [Arguments]    ${x}    ${y}
+    ${result}=    Evaluate    ${x} + ${y}
+    [Return]    ${result}
