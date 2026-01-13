@@ -1,27 +1,44 @@
+ResponseA response_time=120
+ResponseB response_time=850
+ResponseC response_time=300
+
+📄 Libraries/response_validator.py
+import re
+
+class ResponseValidator:
+    """
+    Custom Robot Framework library to validate response times from a log file
+    """
+
+    def validate_response_time_log(self, log_file_path):
+        """
+        Reads a log file, parses response times, validates them,
+        and returns a dictionary with PASS/FAIL status.
+        """
+        result = {}
+
+        with open(log_file_path, "r") as file:
+            for line in file:
+                # Example line: ResponseA response_time=120
+                match = re.search(r'(\w+)\s+response_time=(\d+)', line)
+                if match:
+                    response_name = match.group(1)
+                    response_time = int(match.group(2))
+
+                    if response_time <= 500:
+                        result[response_name] = "PASS"
+                    else:
+                        result[response_name] = "FAIL"
+
+        return result
+
+
+📄 TestSuite/validate_response.robot
+
 *** Settings ***
-Library    BuiltIn
-
-*** Keywords ***
-Add Two Numbers Globally
-    [Arguments]    ${a}    ${b}
-    ${result}=    Evaluate    ${a} + ${b}
-    [Return]    ${result}
-
-
-*** Settings ***
-Resource    ../Resources/math_keywords.robot
+Library    ../Libraries/response_validator.py
 
 *** Test Cases ***
-Add Two Numbers Using Global Keyword
-    ${sum}=    Add Two Numbers Globally    10    20
-    Log To Console    Global Sum = ${sum}
-
-Add Two Numbers Using Local Keyword
-    ${sum}=    Add Two Numbers Locally    5    7
-    Log To Console    Local Sum = ${sum}
-
-*** Keywords ***
-Add Two Numbers Locally
-    [Arguments]    ${x}    ${y}
-    ${result}=    Evaluate    ${x} + ${y}
-    [Return]    ${result}
+Validate Response Time Log
+    ${result}=    Validate Response Time Log    ../Logs/response.log
+    Log    ${result}
