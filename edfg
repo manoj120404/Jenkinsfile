@@ -1,18 +1,41 @@
-[Documentation]     This testcase verifies the logins cenarion with valid credentails
-# open firefox browser
-Open Browser    https://opensource-demo.orangehrmlive.com/web/index.php/auth/login  ${browser}
-# maximize the browser window
-Maximize Browser Window
-# wait until the element is laoded
-Wait Until Element Is Visible    xpath://input[@name='username']
-#  enter text in username field
-Input Text    xpath://input[@name='username']    Admin
-Wait Until Element Is Visible    xpath://input[@name='username']
- #  enter text in password field
-Input Password    xpath://input[@name='password']    admin123
-# clikc on login button
-Click Element    xpath://button[@type= 'submit']
-Wait Until Element Is Visible     xpath://h6[normalize-space()='Dashboard']
-Element Should Be Visible    xpath://h6[normalize-space()='Dashboard']
- # close the current browser session
-Close Browser
+*** Settings ***
+Library    SeleniumLibrary
+Suite Setup    Open Test Browser
+Suite Teardown    Close Browser
+
+*** Variables ***
+${BROWSER}      chrome
+${URL}          https://www.tutorialspoint.com/selenium/practice/selenium_automation_practice.php
+${FILE_PATH}    C:/Users/Administrator/Downloads/images.jpg
+
+Open Test Browser
+    Open Browser    ${URL}    ${BROWSER}
+    Maximize Browser Window
+    Wait Until Element Is Visible    xpath://input[@id='name']    10s
+
+Input First Name
+    Input Text    xpath://input[@id='name']    Manoj
+
+Input Last Name
+    Input Text    xpath://input[@id='email']    manoj@gmail.com
+
+Select Gender
+    Click Element    xpath://input[@id='gender']
+
+Select Experience
+    Click Element    xpath://input[@id='exp-2']
+
+Input Date
+    Input Text    xpath://input[@id='datepicker']    15/01/2026
+
+Select Profession
+    Click Element    xpath://input[@id='profession-1']
+
+Upload File
+    Choose File    xpath://input[@id='photo']    ${FILE_PATH}
+
+Submit Form
+    Click Button    xpath://button[normalize-space()='Submit']
+
+Validate Submission
+    Wait Until Page Contains    Thanks for submitting the form    10s
