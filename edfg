@@ -1,40 +1,18 @@
-ResponseA response_time=120
-ResponseB response_time=850
-ResponseC response_time=300
-
-📄 Libraries/response_validator.py
-import re
-
-def validate_response_time_log(log_file_path):
-    """
-    Reads response log, validates response times,
-    and returns PASS/FAIL for each response
-    """
-    result = {}
-
-    with open(log_file_path, "r") as file:
-        for line in file:
-            match = re.search(r'(\w+)\s+response_time=(\d+)', line)
-            if match:
-                response_name = match.group(1)
-                response_time = int(match.group(2))
-
-                if response_time <= 500:
-                    result[response_name] = "PASS"
-                else:
-                    result[response_name] = "FAIL"
-
-    return result
-
-
-
-
-📄 TestSuite/validate_response.robot
-
-*** Settings ***
-Library    ../Libraries/responsevalidator.py
-
-*** Test Cases ***
-Validate Response Time Log
-    ${result}=    Validate Response Time Log    ../Logs/response.log
-    Log    ${result}
+[Documentation]     This testcase verifies the logins cenarion with valid credentails
+# open firefox browser
+Open Browser    https://opensource-demo.orangehrmlive.com/web/index.php/auth/login  ${browser}
+# maximize the browser window
+Maximize Browser Window
+# wait until the element is laoded
+Wait Until Element Is Visible    xpath://input[@name='username']
+#  enter text in username field
+Input Text    xpath://input[@name='username']    Admin
+Wait Until Element Is Visible    xpath://input[@name='username']
+ #  enter text in password field
+Input Password    xpath://input[@name='password']    admin123
+# clikc on login button
+Click Element    xpath://button[@type= 'submit']
+Wait Until Element Is Visible     xpath://h6[normalize-space()='Dashboard']
+Element Should Be Visible    xpath://h6[normalize-space()='Dashboard']
+ # close the current browser session
+Close Browser
