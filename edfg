@@ -1,41 +1,52 @@
 *** Settings ***
 Library    SeleniumLibrary
-Suite Setup    Open Test Browser
-Suite Teardown    Close Browser
 
 *** Variables ***
 ${BROWSER}      chrome
 ${URL}          https://www.tutorialspoint.com/selenium/practice/selenium_automation_practice.php
 ${FILE_PATH}    C:/Users/Administrator/Downloads/images.jpg
-
-Open Test Browser
-    Open Browser    ${URL}    ${BROWSER}
+*** Test Cases ***
+Launch browser
+    Open Browser    https://www.tutorialspoint.com/selenium/practice/selenium_automation_practice.php    ${BROWSER}
     Maximize Browser Window
     Wait Until Element Is Visible    xpath://input[@id='name']    10s
 
 Input First Name
     Input Text    xpath://input[@id='name']    Manoj
+    Sleep    3s
 
 Input Last Name
     Input Text    xpath://input[@id='email']    manoj@gmail.com
+    Sleep    3s
 
 Select Gender
-    Click Element    xpath://input[@id='gender']
+    Click Element    xpath://label[normalize-space()='Male']
+    Sleep    3s
 
-Select Experience
-    Click Element    xpath://input[@id='exp-2']
+Select mobile
+    Input Text    xpath://input[@id='mobile']       1234567890
+    Sleep    3s
 
 Input Date
-    Input Text    xpath://input[@id='datepicker']    15/01/2026
-
-Select Profession
-    Click Element    xpath://input[@id='profession-1']
+    Input Text    xpath://input[@id='dob']    15/01/2026
+    Sleep    3s
+Input subject
+    Input Text    xpath://input[@id='subjects']    hello
+Select hobbies
+    Click Element    xpath://label[normalize-space()='Sports']
+    Sleep    3s
 
 Upload File
-    Choose File    xpath://input[@id='photo']    ${FILE_PATH}
+    Choose File    xpath://input[@id='picture']   ${FILE_PATH}
+    Sleep    3s
+
+select address
+    Input Text    xpath://textarea[@id='picture']    hyd
+select state
+    Select From List By Value    xpath://select[@id='state']    NCR
+    Select From List By Label    xpath://select[@id='city']     Agra
 
 Submit Form
-    Click Button    xpath://button[normalize-space()='Submit']
-
-Validate Submission
-    Wait Until Page Contains    Thanks for submitting the form    10s
+    Click Button    xpath://input[@value='Login']
+    Sleep    3s
+    Close Browser
