@@ -1,4 +1,53 @@
-Call Method    ${options}    add_argument    --headless
-Call Method    ${options}    add_argument    --no-sandbox
-Open Browser    https://opensource-demo.orangehrmlive.com/web/index.php/auth/login        firefox    options=${options}
-${options}=    Evaluate    sys.modules['selenium.webdriver'].FirefoxOptions()    sys
+*** Settings ***
+Library    SeleniumLibrary
+Suite Setup    Open Browser To SauceDemo
+Suite Teardown    Close Browser
+
+*** Variables ***
+${URL}              https://www.saucedemo.com/
+${BROWSER}          chrome
+${USERNAME}         standard_user
+${PASSWORD}         secret_sauce
+${FIRSTNAME}        Manoj
+${LASTNAME}         Reddy
+${POSTALCODE}       500001
+
+*** Test Cases ***
+Validate Order Placement In SauceDemo
+    Login To Application
+    Add Product To Cart
+    Go To Cart
+    Checkout Process
+    Validate Order Placed
+
+*** Keywords ***
+Open Browser To SauceDemo
+    Open Browser    ${URL}    ${BROWSER}
+    Maximize Browser Window
+    Wait Until Element Is Visible    id:user-name    10s
+
+Login To Application
+    Input Text    id:user-name    ${USERNAME}
+    Input Text    id:password     ${PASSWORD}
+    Click Button  id:login-button
+    Wait Until Element Is Visible    xpath://span[text()='Products']    10s
+
+Add Product To Cart
+    Click Button    id:add-to-cart-sauce-labs-backpack
+
+Go To Cart
+    Click Element   class:shopping_cart_link
+    Wait Until Element Is Visible    xpath://span[text()='Your Cart']
+
+Checkout Process
+    Click Button    id:checkout
+    Wait Until Element Is Visible    id:first-name
+    Input Text      id:first-name     ${FIRSTNAME}
+    Input Text      id:last-name      ${LASTNAME}
+    Input Text      id:postal-code    ${POSTALCODE}
+    Click Button    id:continue
+    Wait Until Element Is Visible    xpath://span[text()='Checkout: Overview']
+    Click Button    id:finish
+
+Validate Order Placed
+    Wait Until Page Contains    Thank you for your order!    10s
