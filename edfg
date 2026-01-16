@@ -1,3 +1,4 @@
 Call Method    ${options}    add_argument    --headless
 Call Method    ${options}    add_argument    --no-sandbox
 Open Browser    https://opensource-demo.orangehrmlive.com/web/index.php/auth/login        firefox    options=${options}
+${options}=    Evaluate    sys.modules['selenium.webdriver'].FirefoxOptions()    sys
